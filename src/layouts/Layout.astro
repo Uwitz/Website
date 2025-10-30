@@ -1,0 +1,58 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+import Footer from '../components/Footer.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Uwitz - Open-source Organization" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href="/logo.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+		<Footer />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		/* Red accent to match logo */
+		--accent: 239, 68, 68; /* #EF4444 */
+		--accent-light: 252, 165, 165; /* #FCA5A5 */
+		--accent-dark: 127, 29, 29; /* #7F1D1D */
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+	html {
+		font-family: system-ui, sans-serif;
+		background: #13151a;
+		background-size: 224px;
+		color: white;
+		scroll-behavior: smooth;
+	}
+	code {
+		font-family: 'JetBrains Mono', monospace;
+	}
+	.accent-gradient {
+		background: var(--accent-gradient);
+	}
+	.font-jetbrains {
+		font-family: 'JetBrains Mono', monospace;
+	}
+</style>

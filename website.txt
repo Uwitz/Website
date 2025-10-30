@@ -1,0 +1,8 @@
+  > XRP: rUaGneGsUrmCBytu5rY9R8hqkQgXV9ZGQ5
+  > SOL: 9DxEc1w52qC17mzrNZ4U6paLbgvXqUvg8dRyo8YVGD4A
+  > USDT: 0x7e0Ba07A1A69ce4C26561e89B19058c7fB00ADB5
+  > BTC: bc1qtp96njt023vgjlrwzdthjcnhnmqyh2ff2lpu5q
+  > ETH: 0x7e0Ba07A1A69ce4C26561e89B19058c7fB00ADB5
+
+ - Projects Page:
+  - All of the projects we worked with in the https://github.com/Uwitz repositories (i need the repositories to automatically show up on the website without adding them manually)

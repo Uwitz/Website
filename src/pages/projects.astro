@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import StarsBackground from '../components/StarsBackground.astro';
+
+const response = await fetch('https://api.github.com/orgs/Uwitz/repos?per_page=24&sort=updated');
+let repos: any[] = [];
+if (response.ok) {
+  const json = await response.json();
+  repos = (Array.isArray(json) ? json : [])
+    .filter(r => !r.fork && !r.archived)
+    .sort((a, b) => b.stargazers_count - a.stargazers_count);
+}
+---
+
+<BaseLayout title="Uwitz | Projects">
+  <StarsBackground />
+  <Navbar />
+  <main class="relative min-h-screen text-gray-100 pt-16">
+    <div id="gradient-overlay" class="fixed inset-0 bg-gradient-to-b from-black to-red-900/30 opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+    <section class="container mx-auto px-4 py-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-red-500/20 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <h1 class="text-3xl font-bold text-red-500 font-jetbrains tracking-tight">Projects</h1>
+            <a href="https://github.com/Uwitz" target="_blank" class="text-sm text-gray-300 hover:text-red-400">View on GitHub →</a>
+          </div>
+          <p class="text-gray-300 mb-6">Open-source repositories maintained by Uwitz. Data fetched live from GitHub.</p>
+          <div class="grid md:grid-cols-2 gap-4">
+            {repos.length === 0 ? (
+              <div class="text-gray-400">No repositories found or GitHub rate limit exceeded. Try again later.</div>
+            ) : (
+              repos.map(repo => (
+                <a href={repo.html_url} target="_blank" class="bg-black/40 backdrop-blur-sm rounded-2xl p-5 border border-red-500/20 shadow-2xl hover:border-red-500/40 transition-all group block">
+                  <h3 class="text-xl font-bold mb-1 text-red-500 group-hover:text-red-400 transition-colors">{repo.name}</h3>
+                  <p class="text-gray-300 mb-3">{repo.description || 'No description provided.'}</p>
+                  <div class="flex items-center gap-3 text-sm text-gray-400">
+                    <span>★ {repo.stargazers_count}</span>
+                    <span>⑂ {repo.forks_count}</span>
+                    {repo.language && <span>{repo.language}</span>}
+                    <span>Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
+                  </div>
+                </a>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  html { scroll-behavior: smooth; }
+  #gradient-overlay { will-change: opacity; transform: translateZ(0); }
+  @media (prefers-reduced-motion: reduce) {
+    #gradient-overlay { transition: none; }
+  }
+</style>
+
+<script>
+  const gradientOverlay = document.getElementById('gradient-overlay');
+  window.addEventListener('scroll', () => {
+    const maxScroll = (document.documentElement.scrollHeight - window.innerHeight);
+    const scrollPercent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+    const opacity = Math.max(0.3, 1 - (scrollPercent / 100));
+    if (gradientOverlay) gradientOverlay.style.opacity = opacity.toString();
+  });
+</script>
+
+

@@ -1,0 +1,119 @@
+---
+const navItems = [
+  { href: '#about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '#contact', label: 'Contact' },
+  { href: 'https://uptime.uwitz.org', label: 'Uptime', external: true }
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-md border-b border-red-500/10">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="flex items-center gap-2 text-red-500 font-jetbrains text-xl font-bold tracking-tight hover:text-red-400 transition-colors">
+        <img src="/logo.png" alt="Uwitz" class="w-7 h-7 rounded" />
+        Uwitz
+      </a>
+      <div class="hidden md:flex items-center space-x-8">
+        {navItems.map(item => (
+          <a 
+            href={item.href} 
+            target={item.external ? "_blank" : undefined}
+            rel={item.external ? "noopener noreferrer" : undefined}
+            class="text-gray-300 hover:text-red-500 transition-colors relative group flex items-center gap-1"
+          >
+            {item.label}
+            {item.external && (
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            )}
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+        ))}
+        <a 
+          id="donate-button" 
+          href="/donate" 
+          class="bg-black/40 hover:bg-black/60 text-red-500 px-3 py-1 rounded-lg transition-all duration-300 border-2 border-red-500/20 hover:border-red-500/40 font-jetbrains tracking-tight"
+        >
+          Donate
+        </a>
+      </div>
+      <button 
+        class="md:hidden text-gray-300 hover:text-red-500 transition-colors"
+        id="mobile-menu-button"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div 
+    class="md:hidden bg-black/95 backdrop-blur-md border-b border-red-500/10 hidden transition-all duration-300 ease-in-out"
+    id="mobile-menu"
+  >
+    <div class="container mx-auto px-4 py-4 space-y-4">
+      {navItems.map(item => (
+        <a 
+          href={item.href} 
+          target={item.external ? "_blank" : undefined}
+          rel={item.external ? "noopener noreferrer" : undefined}
+          class="block text-gray-300 hover:text-red-500 transition-colors py-2 flex items-center gap-1"
+        >
+          {item.label}
+          {item.external && (
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          )}
+        </a>
+      ))}
+      <a 
+        id="donate-button-mobile" 
+        href="/donate" 
+        class="block bg-black/40 hover:bg-black/60 text-red-500 px-0 py-0 rounded-lg transition-all duration-300 border-2 border-red-500/20 hover:border-red-500/40 font-jetbrains tracking-tight text-center"
+      >
+        Donate
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const donateButton = document.getElementById('donate-button') as HTMLAnchorElement;
+  const donateButtonMobile = document.getElementById('donate-button-mobile') as HTMLAnchorElement;
+
+  mobileMenuButton?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!mobileMenuButton?.contains(e.target as Node) && !mobileMenu?.contains(e.target as Node)) {
+      mobileMenu?.classList.add('hidden');
+    }
+  });
+
+  // Close mobile menu when clicking a link
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+    });
+  });
+
+  // Change button text and link if on the donation page
+  if (window.location.pathname === '/donate') {
+    if (donateButton) {
+      donateButton.textContent = 'Home';
+      donateButton.href = '/';
+    }
+    if (donateButtonMobile) {
+      donateButtonMobile.textContent = 'Home';
+      donateButtonMobile.href = '/';
+    }
+  }
+</script> 
